@@ -225,31 +225,40 @@
             const forecastDate = parseDate(forecastDateStr);
             const today = new Date();
 
-            // if (isNaN(currentPTO) || !forecastDateStr || isNaN(forecastDays)) {
-            //     document.getElementById('forecastResult').innerText = 'Please fill in all forecast fields correctly.';
-            //     return;
-            // }
-
-            if (isNaN(currentPTO) || !targetDateStr) {
+            if (isNaN(currentPTO) || !forecastDateStr || isNaN(forecastDays)) {
                 const resultBox = document.getElementById('forecastResult');
                 resultBox.style.display = 'block';
-                resultBox.innerText = '❌ Please fill in all fields correctly.';
+                resultBox.innerText = '❌ Please fill in all forecast fields correctly.';
                 return;
+            }
+
+            // 🧠 INCLUDE planned PTO like in calculatePTO
+            const entryType = document.getElementById("entryType").value;
+            let usedPTO = 0;
+
+            if (entryType === "dates") {
+                const ptoLines = document.getElementById('ptoEntries').value.split('\n');
+                usedPTO = getPlannedPTOsByDates(ptoLines, forecastDate).reduce((sum, h) => sum + h, 0);
+            } else if (entryType === "months") {
+                const monthLines = document.getElementById('monthlyEntries').value.split('\n');
+                usedPTO = getPlannedPTOsByMonths(monthLines);
             }
 
             const payPeriods = calculatePayPeriods(today, forecastDate);
             const accrued = payPeriods * ACCRUAL_PER_PERIOD;
-            const forecastBalance = currentPTO + accrued;
+            const forecastBalance = currentPTO + accrued - usedPTO;
             const neededHours = forecastDays * 8;
             const difference = forecastBalance - neededHours;
 
             const message = difference >= 0
-                ? `✅ Yes! You'll have enough PTO. You will have ${forecastBalance.toFixed(2)} hours and need ${neededHours.toFixed(2)} hours.`
-                : `❌ No, you'll be short by ${(Math.abs(difference)).toFixed(2)} hours. You'll have ${forecastBalance.toFixed(2)} hours and need ${neededHours.toFixed(2)} hours.`;
+                ? `✅ Yes! You'll have enough PTO. You will have ${forecastBalance.toFixed(2)} hours (after planned usage) and need ${neededHours.toFixed(2)} hours.`
+                : `❌ No, you'll be short by ${(Math.abs(difference)).toFixed(2)} hours. You'll have ${forecastBalance.toFixed(2)} hours (after planned usage) and need ${neededHours.toFixed(2)} hours.`;
 
-            document.getElementById('forecastResult').style.display = 'block';
-            document.getElementById('forecastResult').innerHTML = message;
+            const resultBox = document.getElementById('forecastResult');
+            resultBox.style.display = 'block';
+            resultBox.innerHTML = message;
         }
+
     </script>
 </body>
 
