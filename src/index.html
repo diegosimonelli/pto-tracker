@@ -4,28 +4,39 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <title>PTO Tracker</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Inter', system-ui, sans-serif;
             background: #f4f4f8;
             margin: 0;
             padding: 2rem;
             color: #333;
+            font-size: 15px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
         }
 
         .container {
             max-width: 600px;
             margin: auto;
-            background: white;
+            /* background: white; */
             padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        h1 {
-            text-align: center;
-            margin-bottom: 1rem;
+            /* border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
         }
 
         label {
@@ -38,6 +49,7 @@
         button,
         select {
             width: 100%;
+            box-sizing: border-box;
             padding: 0.7rem;
             margin-bottom: 1rem;
             border: 1px solid #ccc;
@@ -69,16 +81,10 @@
         <h1>PTO Tracker</h1>
         <label for="currentPTO">Current PTO Hours:</label>
         <input type="number" id="currentPTO" step="0.01" />
-
-        <h2>Accrual Forecast Assistant</h2>
-
-        <label for="targetDate">Target Date (MM-DD-YYYY):</label>
-        <input type="text" id="targetDate" placeholder="MM-DD-YYYY" />
-
         <label for="entryType">How do you want to enter your planned PTO?</label>
         <select id="entryType">
-            <option value="dates">By Date Range (e.g. 06-01-2025 to 06-05-2025)</option>
-            <option value="months">By Month (e.g. June: 3 days)</option>
+            <option value="dates">By Date Range</option>
+            <option value="months">By Month and Days</option>
         </select>
 
         <div id="dateEntry">
@@ -92,6 +98,13 @@
                 line):</label>
             <textarea id="monthlyEntries" rows="6"></textarea>
         </div>
+
+        <hr />
+
+        <h2>Accrual Forecast Assistant</h2>
+
+        <label for="targetDate">Target Date (MM-DD-YYYY):</label>
+        <input type="text" id="targetDate" placeholder="MM-DD-YYYY" />
 
         <button onclick="calculatePTO()">Calculate</button>
 
